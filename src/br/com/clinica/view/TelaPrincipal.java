@@ -1,13 +1,15 @@
 package br.com.clinica.view;
 
+import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
@@ -16,13 +18,11 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
+
+import com.toedter.calendar.JCalendar;
 
 import br.com.clinica.jasperClass.Relatorios;
-import br.com.clinica.model.Paciente;
-import com.toedter.calendar.JCalendar;
-import java.awt.Color;
-import java.awt.Font;
+import br.com.clinica.relatorios.Relatorio;
 
 public class TelaPrincipal extends JFrame {
 
@@ -106,37 +106,31 @@ public class TelaPrincipal extends JFrame {
 		menuBar.add(mnRelarotio);
 		
 		JMenuItem mntmDiario = new JMenuItem("Medicos");
+		mntmDiario.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Relatorios relatorio = new Relatorios();
+				relatorio.imprimirMedico();
+				
+			}
+		});
 		mnRelarotio.add(mntmDiario);
 		
 		JMenuItem mntmMensal = new JMenuItem("Pacientes");
 		mntmMensal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
-				int conf;
-				conf = JOptionPane.showConfirmDialog(null, "Gerar relatorio?", "Atençao", JOptionPane.YES_NO_OPTION);
-				if(conf == JOptionPane.YES_OPTION){
-					
-				try {
-					
-					List<Paciente> pacientes = new ArrayList<Paciente>();
-					
-					Relatorios relatorio = new Relatorios();
-					relatorio.imprimir(pacientes);
-					
-				} catch (Exception e) {
-					e.printStackTrace();
-					JOptionPane.showMessageDialog(null, e);
-				}
-				
-				}else{
-					JOptionPane.showMessageDialog(null, "erro");
-				}
-			
-		  }
+				Relatorio rel = new Relatorio();
+				rel.GeraRelatorio();
+			}
 		});
 		mnRelarotio.add(mntmMensal);
 		
 		JMenuItem mntmAnual = new JMenuItem("Usuarios");
+		mntmAnual.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Relatorios relatorio = new Relatorios();
+				relatorio.imprimirUsuarios();
+			}
+		});
 		mnRelarotio.add(mntmAnual);
 		
 		JMenu mnHelp = new JMenu("Help");
@@ -156,14 +150,18 @@ public class TelaPrincipal extends JFrame {
 		});
 		mnSobre_1.add(mntmSistemaclinica);
 		
-		JMenuItem mntmSair = new JMenuItem("Sair");
-		mntmSair.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				
+		JMenu mnSair = new JMenu("Sair");	
+		mnSair.setToolTipText("Fechar Sistema");
+		mnSair.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
 				System.exit(0);
 			}
 		});
-		mnSobre_1.add(mntmSair);
+		menuBar.add(mnSair);
+		
+		JMenuBar menuBar_1 = new JMenuBar();
+		menuBar.add(menuBar_1);
 		getContentPane().setLayout(null);
 		
 //		mundando background do desktoppainel e redimessionando todo espaço
